@@ -556,6 +556,47 @@
     .wa-link { padding: 16px 18px; gap: 13px; }
     .wa-icon-wrap { width: 42px; height: 42px; }
   }
+
+  /* CITY DROPDOWN */
+  .city-dropdown-wrap {
+    text-align: center;
+    margin: 10px 0 16px;
+  }
+
+  #city-select {
+    background: rgba(0,0,0,0.4);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    padding: 8px 22px 8px 16px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C9A84C' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 12px rgba(201,168,76,0.15);
+  }
+
+  #city-select:hover, #city-select:focus {
+    border-color: #f0c060;
+    box-shadow: 0 0 20px rgba(201,168,76,0.35);
+    color: #f0c060;
+  }
+
+  #city-select option {
+    background: #111827;
+    color: var(--text);
+    font-size: 14px;
+  }
+
 </style>
 </head>
 <body>
@@ -571,7 +612,17 @@
 
   <!-- LIVE COUNTDOWN -->
   <div class="countdown-section">
-    <p class="countdown-title">Islamabad — Live Countdown</p>
+    <p class="countdown-title">Shehar Chunein — Live Countdown</p>
+    <div class="city-dropdown-wrap">
+      <select id="city-select" onchange="onCityChange()">
+        <option value="sargodha" selected>📍 Sargodha</option>
+        <option value="islamabad">📍 Islamabad</option>
+        <option value="lahore">📍 Lahore</option>
+        <option value="bahawalpur">📍 Bahawalpur</option>
+        <option value="karachi">📍 Karachi</option>
+        <option value="quetta">📍 Quetta</option>
+      </select>
+    </div>
     <p class="countdown-label sehri-mode" id="cd-label">⏳ Sehri mein bacha waqt...</p>
     <div class="countdown-boxes">
       <div class="cbox" id="cd-box-h"><div class="cbox-num" id="cd-h">00</div><div class="cbox-label">Ghante</div></div>
@@ -652,78 +703,306 @@
 </div>
 
 <script>
-const data = [
-  { roza: 1,  date: "19 Feb", day: "Jumeraat", sehr: "5:25am", iftar: "5:56pm", duration: "12h 31m" },
-  { roza: 2,  date: "20 Feb", day: "Juma",     sehr: "5:24am", iftar: "5:56pm", duration: "12h 32m" },
-  { roza: 3,  date: "21 Feb", day: "Hafta",    sehr: "5:23am", iftar: "5:57pm", duration: "12h 34m" },
-  { roza: 4,  date: "22 Feb", day: "Itwar",    sehr: "5:22am", iftar: "5:58pm", duration: "12h 36m" },
-  { roza: 5,  date: "23 Feb", day: "Peer",     sehr: "5:21am", iftar: "5:59pm", duration: "12h 38m" },
-  { roza: 6,  date: "24 Feb", day: "Mangal",   sehr: "5:20am", iftar: "6:00pm", duration: "12h 40m" },
-  { roza: 7,  date: "25 Feb", day: "Budh",     sehr: "5:19am", iftar: "6:01pm", duration: "12h 42m" },
-  { roza: 8,  date: "26 Feb", day: "Jumeraat", sehr: "5:17am", iftar: "6:02pm", duration: "12h 45m" },
-  { roza: 9,  date: "27 Feb", day: "Juma",     sehr: "5:16am", iftar: "6:02pm", duration: "12h 46m" },
-  { roza: 10, date: "28 Feb", day: "Hafta",    sehr: "5:15am", iftar: "6:03pm", duration: "12h 48m" },
-  { roza: 11, date: "1 Mar",  day: "Itwar",    sehr: "5:14am", iftar: "6:04pm", duration: "12h 50m" },
-  { roza: 12, date: "2 Mar",  day: "Peer",     sehr: "5:13am", iftar: "6:05pm", duration: "12h 52m" },
-  { roza: 13, date: "3 Mar",  day: "Mangal",   sehr: "5:12am", iftar: "6:06pm", duration: "12h 54m" },
-  { roza: 14, date: "4 Mar",  day: "Budh",     sehr: "5:10am", iftar: "6:07pm", duration: "12h 57m" },
-  { roza: 15, date: "5 Mar",  day: "Jumeraat", sehr: "5:09am", iftar: "6:07pm", duration: "12h 58m" },
-  { roza: 16, date: "6 Mar",  day: "Juma",     sehr: "5:08am", iftar: "6:08pm", duration: "13h 0m" },
-  { roza: 17, date: "7 Mar",  day: "Hafta",    sehr: "5:07am", iftar: "6:09pm", duration: "13h 2m" },
-  { roza: 18, date: "8 Mar",  day: "Itwar",    sehr: "5:05am", iftar: "6:10pm", duration: "13h 5m" },
-  { roza: 19, date: "9 Mar",  day: "Peer",     sehr: "5:04am", iftar: "6:11pm", duration: "13h 7m" },
-  { roza: 20, date: "10 Mar", day: "Mangal",   sehr: "5:03am", iftar: "6:11pm", duration: "13h 8m" },
-  { roza: 21, date: "11 Mar", day: "Budh",     sehr: "5:01am", iftar: "6:12pm", duration: "13h 11m" },
-  { roza: 22, date: "12 Mar", day: "Jumeraat", sehr: "5:00am", iftar: "6:13pm", duration: "13h 13m" },
-  { roza: 23, date: "13 Mar", day: "Juma",     sehr: "4:59am", iftar: "6:14pm", duration: "13h 15m" },
-  { roza: 24, date: "14 Mar", day: "Hafta",    sehr: "4:57am", iftar: "6:15pm", duration: "13h 18m" },
-  { roza: 25, date: "15 Mar", day: "Itwar",    sehr: "4:56am", iftar: "6:15pm", duration: "13h 19m" },
-  { roza: 26, date: "16 Mar", day: "Peer",     sehr: "4:55am", iftar: "6:16pm", duration: "13h 21m" },
-  { roza: 27, date: "17 Mar", day: "Mangal",   sehr: "4:53am", iftar: "6:17pm", duration: "13h 24m" },
-  { roza: 28, date: "18 Mar", day: "Budh",     sehr: "4:52am", iftar: "6:18pm", duration: "13h 26m" },
-  { roza: 29, date: "19 Mar", day: "Jumeraat", sehr: "4:50am", iftar: "6:18pm", duration: "13h 28m" },
-  { roza: 30, date: "20 Mar", day: "Juma",     sehr: "4:49am", iftar: "6:19pm", duration: "13h 30m" },
+// ============================================================
+// CITY DATA — Sehri & Iftar timings for all 6 cities
+// Offsets based on geographic longitude differences from Islamabad
+// ============================================================
+const cityData = {
+  islamabad: {
+    name: "Islamabad",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:25am", iftar:"5:56pm", duration:"12h 31m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:24am", iftar:"5:56pm", duration:"12h 32m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:23am", iftar:"5:57pm", duration:"12h 34m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:22am", iftar:"5:58pm", duration:"12h 36m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:21am", iftar:"5:59pm", duration:"12h 38m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:20am", iftar:"6:00pm", duration:"12h 40m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:19am", iftar:"6:01pm", duration:"12h 42m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:17am", iftar:"6:02pm", duration:"12h 45m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:16am", iftar:"6:02pm", duration:"12h 46m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:15am", iftar:"6:03pm", duration:"12h 48m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:14am", iftar:"6:04pm", duration:"12h 50m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:13am", iftar:"6:05pm", duration:"12h 52m" },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:12am", iftar:"6:06pm", duration:"12h 54m" },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:10am", iftar:"6:07pm", duration:"12h 57m" },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:09am", iftar:"6:07pm", duration:"12h 58m" },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:08am", iftar:"6:08pm", duration:"13h 0m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:07am", iftar:"6:09pm", duration:"13h 2m"  },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"5:05am", iftar:"6:10pm", duration:"13h 5m"  },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"5:04am", iftar:"6:11pm", duration:"13h 7m"  },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"5:03am", iftar:"6:11pm", duration:"13h 8m"  },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"5:01am", iftar:"6:12pm", duration:"13h 11m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"5:00am", iftar:"6:13pm", duration:"13h 13m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"4:59am", iftar:"6:14pm", duration:"13h 15m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"4:57am", iftar:"6:15pm", duration:"13h 18m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"4:56am", iftar:"6:15pm", duration:"13h 19m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"4:55am", iftar:"6:16pm", duration:"13h 21m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"4:53am", iftar:"6:17pm", duration:"13h 24m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"4:52am", iftar:"6:18pm", duration:"13h 26m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"4:50am", iftar:"6:18pm", duration:"13h 28m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"4:49am", iftar:"6:19pm", duration:"13h 30m" },
+    ]
+  },
+  sargodha: {
+    name: "Sargodha",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:22am", iftar:"5:54pm", duration:"12h 32m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:21am", iftar:"5:55pm", duration:"12h 34m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:20am", iftar:"5:55pm", duration:"12h 35m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:19am", iftar:"5:56pm", duration:"12h 37m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:18am", iftar:"5:57pm", duration:"12h 39m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:17am", iftar:"5:58pm", duration:"12h 41m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:16am", iftar:"5:59pm", duration:"12h 43m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:14am", iftar:"6:00pm", duration:"12h 46m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:13am", iftar:"6:00pm", duration:"12h 47m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:12am", iftar:"6:01pm", duration:"12h 49m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:11am", iftar:"6:02pm", duration:"12h 51m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:10am", iftar:"6:03pm", duration:"12h 53m" },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:09am", iftar:"6:04pm", duration:"12h 55m" },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:07am", iftar:"6:05pm", duration:"12h 58m" },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:06am", iftar:"6:05pm", duration:"12h 59m" },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:05am", iftar:"6:06pm", duration:"13h 1m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:04am", iftar:"6:07pm", duration:"13h 3m"  },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"5:02am", iftar:"6:08pm", duration:"13h 6m"  },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"5:01am", iftar:"6:09pm", duration:"13h 8m"  },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"5:00am", iftar:"6:09pm", duration:"13h 9m"  },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"4:58am", iftar:"6:10pm", duration:"13h 12m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"4:57am", iftar:"6:11pm", duration:"13h 14m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"4:56am", iftar:"6:12pm", duration:"13h 16m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"4:54am", iftar:"6:13pm", duration:"13h 19m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"4:53am", iftar:"6:13pm", duration:"13h 20m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"4:52am", iftar:"6:14pm", duration:"13h 22m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"4:50am", iftar:"6:15pm", duration:"13h 25m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"4:49am", iftar:"6:16pm", duration:"13h 27m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"4:47am", iftar:"6:16pm", duration:"13h 29m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"4:46am", iftar:"6:17pm", duration:"13h 31m" },
+    ]
+  },
+  lahore: {
+    name: "Lahore",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:20am", iftar:"5:53pm", duration:"12h 33m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:19am", iftar:"5:53pm", duration:"12h 34m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:18am", iftar:"5:54pm", duration:"12h 36m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:17am", iftar:"5:55pm", duration:"12h 38m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:16am", iftar:"5:56pm", duration:"12h 40m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:15am", iftar:"5:57pm", duration:"12h 42m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:14am", iftar:"5:58pm", duration:"12h 44m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:12am", iftar:"5:59pm", duration:"12h 47m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:11am", iftar:"5:59pm", duration:"12h 48m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:10am", iftar:"6:00pm", duration:"12h 50m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:09am", iftar:"6:01pm", duration:"12h 52m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:08am", iftar:"6:02pm", duration:"12h 54m" },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:07am", iftar:"6:03pm", duration:"12h 56m" },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:05am", iftar:"6:04pm", duration:"12h 59m" },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:04am", iftar:"6:04pm", duration:"13h 0m"  },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:03am", iftar:"6:05pm", duration:"13h 2m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:02am", iftar:"6:06pm", duration:"13h 4m"  },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"5:00am", iftar:"6:07pm", duration:"13h 7m"  },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"4:59am", iftar:"6:08pm", duration:"13h 9m"  },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"4:58am", iftar:"6:08pm", duration:"13h 10m" },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"4:56am", iftar:"6:09pm", duration:"13h 13m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"4:55am", iftar:"6:10pm", duration:"13h 15m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"4:54am", iftar:"6:11pm", duration:"13h 17m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"4:52am", iftar:"6:12pm", duration:"13h 20m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"4:51am", iftar:"6:12pm", duration:"13h 21m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"4:50am", iftar:"6:13pm", duration:"13h 23m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"4:48am", iftar:"6:14pm", duration:"13h 26m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"4:47am", iftar:"6:15pm", duration:"13h 28m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"4:45am", iftar:"6:15pm", duration:"13h 30m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"4:44am", iftar:"6:16pm", duration:"13h 32m" },
+    ]
+  },
+  bahawalpur: {
+    name: "Bahawalpur",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:18am", iftar:"5:52pm", duration:"12h 34m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:17am", iftar:"5:52pm", duration:"12h 35m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:16am", iftar:"5:53pm", duration:"12h 37m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:15am", iftar:"5:54pm", duration:"12h 39m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:14am", iftar:"5:55pm", duration:"12h 41m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:13am", iftar:"5:56pm", duration:"12h 43m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:12am", iftar:"5:57pm", duration:"12h 45m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:10am", iftar:"5:58pm", duration:"12h 48m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:09am", iftar:"5:58pm", duration:"12h 49m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:08am", iftar:"5:59pm", duration:"12h 51m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:07am", iftar:"6:00pm", duration:"12h 53m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:06am", iftar:"6:01pm", duration:"12h 55m" },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:05am", iftar:"6:02pm", duration:"12h 57m" },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:03am", iftar:"6:03pm", duration:"13h 0m"  },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:02am", iftar:"6:03pm", duration:"13h 1m"  },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:01am", iftar:"6:04pm", duration:"13h 3m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:00am", iftar:"6:05pm", duration:"13h 5m"  },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"4:58am", iftar:"6:06pm", duration:"13h 8m"  },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"4:57am", iftar:"6:07pm", duration:"13h 10m" },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"4:56am", iftar:"6:07pm", duration:"13h 11m" },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"4:54am", iftar:"6:08pm", duration:"13h 14m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"4:53am", iftar:"6:09pm", duration:"13h 16m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"4:52am", iftar:"6:10pm", duration:"13h 18m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"4:50am", iftar:"6:11pm", duration:"13h 21m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"4:49am", iftar:"6:11pm", duration:"13h 22m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"4:48am", iftar:"6:12pm", duration:"13h 24m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"4:46am", iftar:"6:13pm", duration:"13h 27m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"4:45am", iftar:"6:14pm", duration:"13h 29m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"4:43am", iftar:"6:14pm", duration:"13h 31m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"4:42am", iftar:"6:15pm", duration:"13h 33m" },
+    ]
+  },
+  karachi: {
+    name: "Karachi",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:46am", iftar:"6:29pm", duration:"12h 43m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:45am", iftar:"6:29pm", duration:"12h 44m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:44am", iftar:"6:30pm", duration:"12h 46m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:43am", iftar:"6:30pm", duration:"12h 47m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:42am", iftar:"6:31pm", duration:"12h 49m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:41am", iftar:"6:32pm", duration:"12h 51m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:40am", iftar:"6:32pm", duration:"12h 52m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:39am", iftar:"6:33pm", duration:"12h 54m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:38am", iftar:"6:33pm", duration:"12h 55m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:37am", iftar:"6:34pm", duration:"12h 57m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:36am", iftar:"6:35pm", duration:"12h 59m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:35am", iftar:"6:35pm", duration:"13h 0m"  },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:34am", iftar:"6:36pm", duration:"13h 2m"  },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:32am", iftar:"6:37pm", duration:"13h 5m"  },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:31am", iftar:"6:37pm", duration:"13h 6m"  },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:30am", iftar:"6:38pm", duration:"13h 8m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:29am", iftar:"6:38pm", duration:"13h 9m"  },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"5:28am", iftar:"6:39pm", duration:"13h 11m" },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"5:27am", iftar:"6:40pm", duration:"13h 13m" },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"5:26am", iftar:"6:40pm", duration:"13h 14m" },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"5:24am", iftar:"6:41pm", duration:"13h 17m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"5:23am", iftar:"6:41pm", duration:"13h 18m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"5:22am", iftar:"6:42pm", duration:"13h 20m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"5:21am", iftar:"6:43pm", duration:"13h 22m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"5:19am", iftar:"6:43pm", duration:"13h 24m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"5:18am", iftar:"6:44pm", duration:"13h 26m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"5:17am", iftar:"6:44pm", duration:"13h 27m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"5:16am", iftar:"6:45pm", duration:"13h 29m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"5:14am", iftar:"6:45pm", duration:"13h 31m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"5:13am", iftar:"6:46pm", duration:"13h 33m" },
+    ]
+  },
+  quetta: {
+    name: "Quetta",
+    data: [
+      { roza:1,  date:"19 Feb", day:"Jumeraat", sehr:"5:30am", iftar:"6:10pm", duration:"12h 40m" },
+      { roza:2,  date:"20 Feb", day:"Juma",     sehr:"5:29am", iftar:"6:11pm", duration:"12h 42m" },
+      { roza:3,  date:"21 Feb", day:"Hafta",    sehr:"5:28am", iftar:"6:11pm", duration:"12h 43m" },
+      { roza:4,  date:"22 Feb", day:"Itwar",    sehr:"5:27am", iftar:"6:12pm", duration:"12h 45m" },
+      { roza:5,  date:"23 Feb", day:"Peer",     sehr:"5:26am", iftar:"6:13pm", duration:"12h 47m" },
+      { roza:6,  date:"24 Feb", day:"Mangal",   sehr:"5:25am", iftar:"6:14pm", duration:"12h 49m" },
+      { roza:7,  date:"25 Feb", day:"Budh",     sehr:"5:24am", iftar:"6:15pm", duration:"12h 51m" },
+      { roza:8,  date:"26 Feb", day:"Jumeraat", sehr:"5:22am", iftar:"6:16pm", duration:"12h 54m" },
+      { roza:9,  date:"27 Feb", day:"Juma",     sehr:"5:21am", iftar:"6:16pm", duration:"12h 55m" },
+      { roza:10, date:"28 Feb", day:"Hafta",    sehr:"5:20am", iftar:"6:17pm", duration:"12h 57m" },
+      { roza:11, date:"1 Mar",  day:"Itwar",    sehr:"5:19am", iftar:"6:18pm", duration:"12h 59m" },
+      { roza:12, date:"2 Mar",  day:"Peer",     sehr:"5:18am", iftar:"6:19pm", duration:"13h 1m"  },
+      { roza:13, date:"3 Mar",  day:"Mangal",   sehr:"5:17am", iftar:"6:20pm", duration:"13h 3m"  },
+      { roza:14, date:"4 Mar",  day:"Budh",     sehr:"5:15am", iftar:"6:21pm", duration:"13h 6m"  },
+      { roza:15, date:"5 Mar",  day:"Jumeraat", sehr:"5:14am", iftar:"6:21pm", duration:"13h 7m"  },
+      { roza:16, date:"6 Mar",  day:"Juma",     sehr:"5:13am", iftar:"6:22pm", duration:"13h 9m"  },
+      { roza:17, date:"7 Mar",  day:"Hafta",    sehr:"5:12am", iftar:"6:23pm", duration:"13h 11m" },
+      { roza:18, date:"8 Mar",  day:"Itwar",    sehr:"5:10am", iftar:"6:24pm", duration:"13h 14m" },
+      { roza:19, date:"9 Mar",  day:"Peer",     sehr:"5:09am", iftar:"6:25pm", duration:"13h 16m" },
+      { roza:20, date:"10 Mar", day:"Mangal",   sehr:"5:08am", iftar:"6:25pm", duration:"13h 17m" },
+      { roza:21, date:"11 Mar", day:"Budh",     sehr:"5:06am", iftar:"6:26pm", duration:"13h 20m" },
+      { roza:22, date:"12 Mar", day:"Jumeraat", sehr:"5:05am", iftar:"6:27pm", duration:"13h 22m" },
+      { roza:23, date:"13 Mar", day:"Juma",     sehr:"5:04am", iftar:"6:28pm", duration:"13h 24m" },
+      { roza:24, date:"14 Mar", day:"Hafta",    sehr:"5:02am", iftar:"6:29pm", duration:"13h 27m" },
+      { roza:25, date:"15 Mar", day:"Itwar",    sehr:"5:01am", iftar:"6:29pm", duration:"13h 28m" },
+      { roza:26, date:"16 Mar", day:"Peer",     sehr:"5:00am", iftar:"6:30pm", duration:"13h 30m" },
+      { roza:27, date:"17 Mar", day:"Mangal",   sehr:"4:58am", iftar:"6:31pm", duration:"13h 33m" },
+      { roza:28, date:"18 Mar", day:"Budh",     sehr:"4:57am", iftar:"6:32pm", duration:"13h 35m" },
+      { roza:29, date:"19 Mar", day:"Jumeraat", sehr:"4:55am", iftar:"6:32pm", duration:"13h 37m" },
+      { roza:30, date:"20 Mar", day:"Juma",     sehr:"4:54am", iftar:"6:33pm", duration:"13h 39m" },
+    ]
+  }
+};
+
+// Active city — default Sargodha
+let activeCity = 'sargodha';
+let data = cityData[activeCity].data;
+
+function onCityChange() {
+  activeCity = document.getElementById('city-select').value;
+  data = cityData[activeCity].data;
+  renderTable();
+  updateCountdown();
+  // Update city selector text in table header
+  document.querySelector('.city-selector strong').textContent = cityData[activeCity].name;
+}
+
+// ============================================================
+// RENDER TABLE
+// ============================================================
+const rozaDates = [
+  null,
+  new Date(2026,1,19), new Date(2026,1,20), new Date(2026,1,21),
+  new Date(2026,1,22), new Date(2026,1,23), new Date(2026,1,24),
+  new Date(2026,1,25), new Date(2026,1,26), new Date(2026,1,27),
+  new Date(2026,1,28), new Date(2026,2,1),  new Date(2026,2,2),
+  new Date(2026,2,3),  new Date(2026,2,4),  new Date(2026,2,5),
+  new Date(2026,2,6),  new Date(2026,2,7),  new Date(2026,2,8),
+  new Date(2026,2,9),  new Date(2026,2,10), new Date(2026,2,11),
+  new Date(2026,2,12), new Date(2026,2,13), new Date(2026,2,14),
+  new Date(2026,2,15), new Date(2026,2,16), new Date(2026,2,17),
+  new Date(2026,2,18), new Date(2026,2,19), new Date(2026,2,20),
 ];
 
-// Today is Feb 18, 2026 — Ramzan starts Feb 19
-// So today is before Ramzan — no today row to highlight yet
-// But let's highlight row 1 as "pehla roza" coming tomorrow
-
-const tbody = document.getElementById('calendar-body');
-let currentAshra = 0;
-
-data.forEach((row, idx) => {
-  const ashra = row.roza <= 10 ? 1 : row.roza <= 20 ? 2 : 3;
-  
-  if (ashra !== currentAshra) {
-    currentAshra = ashra;
-    const headerRow = document.createElement('tr');
-    const labels = ['', '1st Ashra — Rehmat', '2nd Ashra — Maghfirat', '3rd Ashra — Nijaat'];
-    headerRow.innerHTML = `<td colspan="6" class="ashra-header ah-${ashra}">${labels[ashra]}</td>`;
-    tbody.appendChild(headerRow);
+function getTodayRozaIndex() {
+  const now = new Date();
+  for (let i = 1; i <= 30; i++) {
+    const d = rozaDates[i];
+    if (d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth() && d.getDate()===now.getDate()) return i;
   }
+  return null;
+}
 
-  const tr = document.createElement('tr');
-  tr.style.setProperty('--i', idx);
-  
-  const ashraCls = `ashra-${ashra}-row`;
-  tr.className = ashraCls;
+function renderTable() {
+  const tbody = document.getElementById('calendar-body');
+  tbody.innerHTML = '';
+  let currentAshra = 0;
+  const todayIdx = getTodayRozaIndex();
+  const now = new Date();
+  const isBeforeRamzan = now < rozaDates[1];
 
-  // Mark first roza as "Kal ka Roza" since today is Feb 18
-  const isFirst = row.roza === 1;
+  data.forEach((row, idx) => {
+    const ashra = row.roza <= 10 ? 1 : row.roza <= 20 ? 2 : 3;
+    if (ashra !== currentAshra) {
+      currentAshra = ashra;
+      const headerRow = document.createElement('tr');
+      const labels = ['','1st Ashra — Rehmat','2nd Ashra — Maghfirat','3rd Ashra — Nijaat'];
+      headerRow.innerHTML = `<td colspan="6" class="ashra-header ah-${ashra}">${labels[ashra]}</td>`;
+      tbody.appendChild(headerRow);
+    }
+    const tr = document.createElement('tr');
+    tr.style.setProperty('--i', idx);
+    const isFirst = row.roza === 1;
+    const isToday = todayIdx === row.roza;
+    let rowClass = `ashra-${ashra}-row`;
+    if (isToday) rowClass += ' today-row';
+    tr.className = rowClass;
+    let badge = '';
+    if (isToday) badge = '<span class="today-badge">AAJ</span>';
+    else if (isFirst && isBeforeRamzan) badge = '<span class="today-badge">KAL</span>';
+    tr.innerHTML = `
+      <td><span class="roza-num">${row.roza}</span></td>
+      <td class="date-cell">${row.date}${badge}</td>
+      <td class="day-cell">${row.day}</td>
+      <td class="sehri-time">🌅 ${row.sehr}</td>
+      <td class="iftar-time">🌇 ${row.iftar}</td>
+      <td class="duration-cell">${row.duration}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-  tr.innerHTML = `
-    <td><span class="roza-num">${row.roza}</span></td>
-    <td class="date-cell">${row.date}${isFirst ? '<span class="today-badge">KAL</span>' : ''}</td>
-    <td class="day-cell">${row.day}</td>
-    <td class="sehri-time">🌅 ${row.sehr}</td>
-    <td class="iftar-time">🌇 ${row.iftar}</td>
-    <td class="duration-cell">${row.duration}</td>
-  `;
-  tbody.appendChild(tr);
-});
-// ===== COUNTDOWN TIMER =====
-// Parse time string like "5:25am" or "5:56pm" into today's Date object
+renderTable();
+
+// ============================================================
+// COUNTDOWN TIMER
+// ============================================================
 function parseTime(dateObj, timeStr) {
   const match = timeStr.match(/(\d+):(\d+)(am|pm)/i);
   if (!match) return null;
@@ -737,69 +1016,30 @@ function parseTime(dateObj, timeStr) {
   return d;
 }
 
-// Map each roza to its actual calendar date (year 2026)
-const rozaDates = [
-  null, // index 0 unused
-  new Date(2026, 1, 19), // roza 1 = Feb 19
-  new Date(2026, 1, 20),
-  new Date(2026, 1, 21),
-  new Date(2026, 1, 22),
-  new Date(2026, 1, 23),
-  new Date(2026, 1, 24),
-  new Date(2026, 1, 25),
-  new Date(2026, 1, 26),
-  new Date(2026, 1, 27),
-  new Date(2026, 1, 28),
-  new Date(2026, 2, 1),
-  new Date(2026, 2, 2),
-  new Date(2026, 2, 3),
-  new Date(2026, 2, 4),
-  new Date(2026, 2, 5),
-  new Date(2026, 2, 6),
-  new Date(2026, 2, 7),
-  new Date(2026, 2, 8),
-  new Date(2026, 2, 9),
-  new Date(2026, 2, 10),
-  new Date(2026, 2, 11),
-  new Date(2026, 2, 12),
-  new Date(2026, 2, 13),
-  new Date(2026, 2, 14),
-  new Date(2026, 2, 15),
-  new Date(2026, 2, 16),
-  new Date(2026, 2, 17),
-  new Date(2026, 2, 18),
-  new Date(2026, 2, 19),
-  new Date(2026, 2, 20),
-];
-
-function pad(n) { return String(n).padStart(2, '0'); }
+function pad(n) { return String(n).padStart(2,'0'); }
 
 function updateCountdown() {
   const now = new Date();
+  const cityName = cityData[activeCity].name;
 
   // Find today's roza
   let todayRoza = null;
   for (let i = 1; i <= 30; i++) {
     const d = rozaDates[i];
-    if (d.getFullYear() === now.getFullYear() &&
-        d.getMonth() === now.getMonth() &&
-        d.getDate() === now.getDate()) {
-      todayRoza = data[i - 1];
+    if (d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth() && d.getDate()===now.getDate()) {
+      todayRoza = data[i-1];
       break;
     }
   }
 
-  // If before Ramzan
   if (!todayRoza) {
-    // Check if before first roza
     const firstSehri = parseTime(rozaDates[1], data[0].sehr);
     if (now < firstSehri) {
-      // Countdown to first sehri
       const diff = firstSehri - now;
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      document.getElementById('cd-label').textContent = '🌙 Pehli Sehri mein bacha waqt';
+      const h = Math.floor(diff/3600000);
+      const m = Math.floor((diff%3600000)/60000);
+      const s = Math.floor((diff%60000)/1000);
+      document.getElementById('cd-label').textContent = `🌙 ${cityName} — Pehli Sehri mein bacha waqt`;
       document.getElementById('cd-label').className = 'countdown-label sehri-mode';
       setBoxClass('sehri');
       document.getElementById('cd-h').textContent = pad(h);
@@ -818,58 +1058,39 @@ function updateCountdown() {
   const todayDate = rozaDates[rozaIndex];
   const sehriTime = parseTime(todayDate, todayRoza.sehr);
   const iftarTime = parseTime(todayDate, todayRoza.iftar);
-
-  // Next sehri (next day)
   let nextSehriTime = null;
-  if (rozaIndex < 30) {
-    nextSehriTime = parseTime(rozaDates[rozaIndex + 1], data[rozaIndex].sehr);
-  }
+  if (rozaIndex < 30) nextSehriTime = parseTime(rozaDates[rozaIndex+1], data[rozaIndex].sehr);
 
   document.getElementById('ti-roza').textContent = rozaIndex + 'واں رو ژہ';
   document.getElementById('ti-sehri').textContent = todayRoza.sehr;
   document.getElementById('ti-iftar').textContent = todayRoza.iftar;
 
-  let diff, label, mode, totalDuration;
+  let diff, label, mode;
 
   if (now < sehriTime) {
-    // Before sehri → countdown to sehri
     diff = sehriTime - now;
-    // total from midnight to sehri
     const midnight = new Date(todayDate); midnight.setHours(0,0,0,0);
-    totalDuration = sehriTime - midnight;
-    const elapsed = now - midnight;
-    const pct = Math.min(100, (elapsed / totalDuration) * 100);
-    document.getElementById('cd-progress').style.width = pct + '%';
+    const pct = Math.min(100, ((now-midnight)/(sehriTime-midnight))*100);
+    document.getElementById('cd-progress').style.width = pct+'%';
     document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #3d6b9e, #7eb8e8)';
-    label = '🌅 Sehri mein bacha waqt';
-    mode = 'sehri';
-    setBoxClass('sehri');
-  } else if (now >= sehriTime && now < iftarTime) {
-    // During roza → countdown to iftar
+    label = `🌅 ${cityName} — Sehri mein bacha waqt`;
+    mode = 'sehri'; setBoxClass('sehri');
+  } else if (now < iftarTime) {
     diff = iftarTime - now;
-    totalDuration = iftarTime - sehriTime;
-    const elapsed = now - sehriTime;
-    const pct = Math.min(100, (elapsed / totalDuration) * 100);
-    document.getElementById('cd-progress').style.width = pct + '%';
+    const pct = Math.min(100, ((now-sehriTime)/(iftarTime-sehriTime))*100);
+    document.getElementById('cd-progress').style.width = pct+'%';
     document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #c47a35, #e8a35a)';
-    label = '🌇 Iftar mein bacha waqt';
-    mode = 'iftar';
-    setBoxClass('iftar');
+    label = `🌇 ${cityName} — Iftar mein bacha waqt`;
+    mode = 'iftar'; setBoxClass('iftar');
   } else {
-    // After iftar → countdown to next sehri
     if (nextSehriTime) {
       diff = nextSehriTime - now;
-      totalDuration = nextSehriTime - iftarTime;
-      const elapsed = now - iftarTime;
-      const pct = Math.min(100, (elapsed / totalDuration) * 100);
-      document.getElementById('cd-progress').style.width = pct + '%';
+      const pct = Math.min(100, ((now-iftarTime)/(nextSehriTime-iftarTime))*100);
+      document.getElementById('cd-progress').style.width = pct+'%';
       document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #3d6b9e, #7eb8e8)';
-      label = '🌅 Agli Sehri mein bacha waqt';
-      mode = 'sehri';
-      setBoxClass('sehri');
-      // Update next day info
-      const nd = data[rozaIndex];
-      document.getElementById('ti-sehri').textContent = nd.sehr + ' (kal)';
+      label = `🌅 ${cityName} — Agli Sehri mein bacha waqt`;
+      mode = 'sehri'; setBoxClass('sehri');
+      document.getElementById('ti-sehri').textContent = data[rozaIndex].sehr + ' (kal)';
     } else {
       document.getElementById('cd-label').textContent = '🎉 Ramzan Mubarak! Eid Mubarak!';
       return;
@@ -878,23 +1099,20 @@ function updateCountdown() {
 
   document.getElementById('cd-label').textContent = label;
   document.getElementById('cd-label').className = `countdown-label ${mode}-mode`;
-
-  const totalSec = Math.floor(diff / 1000);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  document.getElementById('cd-h').textContent = pad(h);
-  document.getElementById('cd-m').textContent = pad(m);
-  document.getElementById('cd-s').textContent = pad(s);
+  const totalSec = Math.floor(diff/1000);
+  document.getElementById('cd-h').textContent = pad(Math.floor(totalSec/3600));
+  document.getElementById('cd-m').textContent = pad(Math.floor((totalSec%3600)/60));
+  document.getElementById('cd-s').textContent = pad(totalSec%60);
 }
 
 function setBoxClass(mode) {
   ['cd-box-h','cd-box-m','cd-box-s'].forEach(id => {
-    const el = document.getElementById(id);
-    el.className = `cbox ${mode}-box`;
+    document.getElementById(id).className = `cbox ${mode}-box`;
   });
 }
 
+// Init
+document.querySelector('.city-selector strong').textContent = cityData[activeCity].name;
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
