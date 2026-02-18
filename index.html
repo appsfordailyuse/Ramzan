@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramzan Calendar 2026 - Pakistan</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --deep: #0a0f1e;
+    --mid: #111827;
+    --card: #141b2d;
+    --border: #1e2d4a;
+    --text: #e8dcc8;
+    --muted: #8a9bc0;
+    --sehri: #3d6b9e;
+    --iftar: #c47a35;
+    --today: #1a3a2a;
+    --today-border: #2d7a50;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    background-image: 
+      radial-gradient(ellipse at 20% 0%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(61,107,158,0.1) 0%, transparent 50%);
+  }
+
+  header {
+    text-align: center;
+    padding: 50px 20px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .moon-icon {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 10px;
+    animation: glow 3s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    0%, 100% { text-shadow: 0 0 20px rgba(201,168,76,0.3); }
+    50% { text-shadow: 0 0 40px rgba(201,168,76,0.7), 0 0 80px rgba(201,168,76,0.3); }
+  }
+
+  h1 {
+    font-family: 'Amiri', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    color: var(--gold);
+    letter-spacing: 2px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .arabic-text {
+    font-family: 'Amiri', serif;
+    font-size: 28px;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-top: 5px;
+    direction: rtl;
+  }
+
+  .ashra-badges {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px 0 10px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+  }
+
+  .ashra {
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    border: 1px solid;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .ashra-1 { border-color: #4a9e6b; color: #4a9e6b; background: rgba(74,158,107,0.08); }
+  .ashra-2 { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+  .ashra-3 { border-color: #e06b6b; color: #e06b6b; background: rgba(224,107,107,0.08); }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px 15px 60px;
+  }
+
+  .city-selector {
+    text-align: center;
+    margin: 10px 0 30px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .city-selector strong {
+    color: var(--gold);
+    font-size: 16px;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px var(--border);
+  }
+
+  thead tr {
+    background: linear-gradient(135deg, #1a2540, #0f1a30);
+    border-bottom: 1px solid var(--gold);
+  }
+
+  th {
+    padding: 16px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  tbody tr:nth-child(n) { animation-delay: calc(var(--i) * 15ms); }
+
+  tbody tr:hover { background: rgba(201,168,76,0.05); }
+
+  tbody tr.today-row {
+    background: var(--today);
+    border-left: 3px solid var(--today-border);
+    border-right: 3px solid var(--today-border);
+  }
+
+  tbody tr.ashra-1-row { border-left: 3px solid rgba(74,158,107,0.5); }
+  tbody tr.ashra-2-row { border-left: 3px solid rgba(201,168,76,0.5); }
+  tbody tr.ashra-3-row { border-left: 3px solid rgba(224,107,107,0.5); }
+
+  td {
+    padding: 13px 12px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .roza-num {
+    font-family: 'Amiri', serif;
+    font-size: 20px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .date-cell { color: var(--text); font-weight: 600; }
+  .day-cell { color: var(--muted); font-size: 13px; }
+
+  .sehri-time {
+    color: #7eb8e8;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .iftar-time {
+    color: #e8a35a;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .duration-cell {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .today-badge {
+    background: var(--today-border);
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .ashra-header {
+    background: linear-gradient(135deg, #151f30, #0c1520);
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ah-1 { color: #4a9e6b; border-left: 3px solid #4a9e6b; }
+  .ah-2 { color: var(--gold); border-left: 3px solid var(--gold); }
+  .ah-3 { color: #e06b6b; border-left: 3px solid #e06b6b; }
+
+  /* === COUNTDOWN SECTION === */
+  .countdown-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+
+  .countdown-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .countdown-title {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .countdown-label {
+    text-align: center;
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    transition: color 0.5s;
+  }
+
+  .countdown-label.sehri-mode { color: #7eb8e8; }
+  .countdown-label.iftar-mode { color: #e8a35a; }
+
+  .countdown-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .cbox {
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    min-width: 80px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: border-color 0.5s;
+  }
+
+  .cbox.sehri-box { border-color: rgba(126,184,232,0.3); }
+  .cbox.iftar-box { border-color: rgba(232,163,90,0.3); }
+
+  .cbox-num {
+    font-family: 'Amiri', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    transition: color 0.5s;
+  }
+
+  .sehri-box .cbox-num { color: #7eb8e8; }
+  .iftar-box .cbox-num { color: #e8a35a; }
+
+  .cbox-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .colon {
+    font-size: 36px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  .today-info {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    margin-top: 5px;
+  }
+
+  .today-info-item {
+    text-align: center;
+  }
+
+  .today-info-item .ti-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .today-info-item .ti-time {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .ti-sehri { color: #7eb8e8; }
+  .ti-iftar { color: #e8a35a; }
+  .ti-roza { color: var(--gold); font-family: 'Amiri', serif; font-size: 22px; }
+
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 500px;
+    margin: 15px auto 0;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s linear, background 0.5s;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 600px) {
+    th, td { padding: 10px 6px; font-size: 12px; }
+    .roza-num { font-size: 16px; }
+    .sehri-time, .iftar-time { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="moon-icon">🌙</span>
+  <h1>Ramzan ul Mubarak 1447</h1>
+  <p class="subtitle">Pakistan — 2026</p>
+  <p class="arabic-text">رمضان المبارک</p>
+</header>
+
+<div class="container">
+
+  <!-- LIVE COUNTDOWN -->
+  <div class="countdown-section">
+    <p class="countdown-title">Islamabad — Live Countdown</p>
+    <p class="countdown-label sehri-mode" id="cd-label">⏳ Sehri mein bacha waqt...</p>
+    <div class="countdown-boxes">
+      <div class="cbox" id="cd-box-h"><div class="cbox-num" id="cd-h">00</div><div class="cbox-label">Ghante</div></div>
+      <div class="colon">:</div>
+      <div class="cbox" id="cd-box-m"><div class="cbox-num" id="cd-m">00</div><div class="cbox-label">Minute</div></div>
+      <div class="colon">:</div>
+      <div class="cbox" id="cd-box-s"><div class="cbox-num" id="cd-s">00</div><div class="cbox-label">Second</div></div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="cd-progress" style="width:0%"></div>
+    </div>
+    <div class="today-info">
+      <div class="today-info-item">
+        <div class="ti-label">Aaj ka Roza</div>
+        <div class="ti-time ti-roza" id="ti-roza">—</div>
+      </div>
+      <div class="today-info-item">
+        <div class="ti-label">🌅 Sehri</div>
+        <div class="ti-time ti-sehri" id="ti-sehri">—</div>
+      </div>
+      <div class="today-info-item">
+        <div class="ti-label">🌇 Iftar</div>
+        <div class="ti-time ti-iftar" id="ti-iftar">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ashra-badges">
+    <span class="ashra ashra-1">1st Ashra — Rehmat (1–10)</span>
+    <span class="ashra ashra-2">2nd Ashra — Maghfirat (11–20)</span>
+    <span class="ashra ashra-3">3rd Ashra — Nijaat (21–30)</span>
+  </div>
+
+  <div class="city-selector">
+    Sehri &amp; Iftar Timings — <strong>Islamabad</strong>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#7eb8e8"></div> Sehri Time</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e8a35a"></div> Iftar Time</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2d7a50"></div> Aaj ka Roza</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Roza</th>
+        <th>Date</th>
+        <th>Din</th>
+        <th>Sehri</th>
+        <th>Iftar</th>
+        <th>Muddat</th>
+      </tr>
+    </thead>
+    <tbody id="calendar-body">
+    </tbody>
+  </table>
+
+  <footer>
+    <p>🌙 Ramzan Mubarak — Pakistan 2026 / 1447 AH</p>
+    <p style="margin-top:5px; font-size:11px;">Source: Islamabad Prayer Times</p>
+  </footer>
+
+</div>
+
+<script>
+const data = [
+  { roza: 1,  date: "19 Feb", day: "Jumeraat", sehr: "5:25am", iftar: "5:56pm", duration: "12h 31m" },
+  { roza: 2,  date: "20 Feb", day: "Juma",     sehr: "5:24am", iftar: "5:56pm", duration: "12h 32m" },
+  { roza: 3,  date: "21 Feb", day: "Hafta",    sehr: "5:23am", iftar: "5:57pm", duration: "12h 34m" },
+  { roza: 4,  date: "22 Feb", day: "Itwar",    sehr: "5:22am", iftar: "5:58pm", duration: "12h 36m" },
+  { roza: 5,  date: "23 Feb", day: "Peer",     sehr: "5:21am", iftar: "5:59pm", duration: "12h 38m" },
+  { roza: 6,  date: "24 Feb", day: "Mangal",   sehr: "5:20am", iftar: "6:00pm", duration: "12h 40m" },
+  { roza: 7,  date: "25 Feb", day: "Budh",     sehr: "5:19am", iftar: "6:01pm", duration: "12h 42m" },
+  { roza: 8,  date: "26 Feb", day: "Jumeraat", sehr: "5:17am", iftar: "6:02pm", duration: "12h 45m" },
+  { roza: 9,  date: "27 Feb", day: "Juma",     sehr: "5:16am", iftar: "6:02pm", duration: "12h 46m" },
+  { roza: 10, date: "28 Feb", day: "Hafta",    sehr: "5:15am", iftar: "6:03pm", duration: "12h 48m" },
+  { roza: 11, date: "1 Mar",  day: "Itwar",    sehr: "5:14am", iftar: "6:04pm", duration: "12h 50m" },
+  { roza: 12, date: "2 Mar",  day: "Peer",     sehr: "5:13am", iftar: "6:05pm", duration: "12h 52m" },
+  { roza: 13, date: "3 Mar",  day: "Mangal",   sehr: "5:12am", iftar: "6:06pm", duration: "12h 54m" },
+  { roza: 14, date: "4 Mar",  day: "Budh",     sehr: "5:10am", iftar: "6:07pm", duration: "12h 57m" },
+  { roza: 15, date: "5 Mar",  day: "Jumeraat", sehr: "5:09am", iftar: "6:07pm", duration: "12h 58m" },
+  { roza: 16, date: "6 Mar",  day: "Juma",     sehr: "5:08am", iftar: "6:08pm", duration: "13h 0m" },
+  { roza: 17, date: "7 Mar",  day: "Hafta",    sehr: "5:07am", iftar: "6:09pm", duration: "13h 2m" },
+  { roza: 18, date: "8 Mar",  day: "Itwar",    sehr: "5:05am", iftar: "6:10pm", duration: "13h 5m" },
+  { roza: 19, date: "9 Mar",  day: "Peer",     sehr: "5:04am", iftar: "6:11pm", duration: "13h 7m" },
+  { roza: 20, date: "10 Mar", day: "Mangal",   sehr: "5:03am", iftar: "6:11pm", duration: "13h 8m" },
+  { roza: 21, date: "11 Mar", day: "Budh",     sehr: "5:01am", iftar: "6:12pm", duration: "13h 11m" },
+  { roza: 22, date: "12 Mar", day: "Jumeraat", sehr: "5:00am", iftar: "6:13pm", duration: "13h 13m" },
+  { roza: 23, date: "13 Mar", day: "Juma",     sehr: "4:59am", iftar: "6:14pm", duration: "13h 15m" },
+  { roza: 24, date: "14 Mar", day: "Hafta",    sehr: "4:57am", iftar: "6:15pm", duration: "13h 18m" },
+  { roza: 25, date: "15 Mar", day: "Itwar",    sehr: "4:56am", iftar: "6:15pm", duration: "13h 19m" },
+  { roza: 26, date: "16 Mar", day: "Peer",     sehr: "4:55am", iftar: "6:16pm", duration: "13h 21m" },
+  { roza: 27, date: "17 Mar", day: "Mangal",   sehr: "4:53am", iftar: "6:17pm", duration: "13h 24m" },
+  { roza: 28, date: "18 Mar", day: "Budh",     sehr: "4:52am", iftar: "6:18pm", duration: "13h 26m" },
+  { roza: 29, date: "19 Mar", day: "Jumeraat", sehr: "4:50am", iftar: "6:18pm", duration: "13h 28m" },
+  { roza: 30, date: "20 Mar", day: "Juma",     sehr: "4:49am", iftar: "6:19pm", duration: "13h 30m" },
+];
+
+// Today is Feb 18, 2026 — Ramzan starts Feb 19
+// So today is before Ramzan — no today row to highlight yet
+// But let's highlight row 1 as "pehla roza" coming tomorrow
+
+const tbody = document.getElementById('calendar-body');
+let currentAshra = 0;
+
+data.forEach((row, idx) => {
+  const ashra = row.roza <= 10 ? 1 : row.roza <= 20 ? 2 : 3;
+  
+  if (ashra !== currentAshra) {
+    currentAshra = ashra;
+    const headerRow = document.createElement('tr');
+    const labels = ['', '1st Ashra — Rehmat', '2nd Ashra — Maghfirat', '3rd Ashra — Nijaat'];
+    headerRow.innerHTML = `<td colspan="6" class="ashra-header ah-${ashra}">${labels[ashra]}</td>`;
+    tbody.appendChild(headerRow);
+  }
+
+  const tr = document.createElement('tr');
+  tr.style.setProperty('--i', idx);
+  
+  const ashraCls = `ashra-${ashra}-row`;
+  tr.className = ashraCls;
+
+  // Mark first roza as "Kal ka Roza" since today is Feb 18
+  const isFirst = row.roza === 1;
+
+  tr.innerHTML = `
+    <td><span class="roza-num">${row.roza}</span></td>
+    <td class="date-cell">${row.date}${isFirst ? '<span class="today-badge">KAL</span>' : ''}</td>
+    <td class="day-cell">${row.day}</td>
+    <td class="sehri-time">🌅 ${row.sehr}</td>
+    <td class="iftar-time">🌇 ${row.iftar}</td>
+    <td class="duration-cell">${row.duration}</td>
+  `;
+  tbody.appendChild(tr);
+});
+// ===== COUNTDOWN TIMER =====
+// Parse time string like "5:25am" or "5:56pm" into today's Date object
+function parseTime(dateObj, timeStr) {
+  const match = timeStr.match(/(\d+):(\d+)(am|pm)/i);
+  if (!match) return null;
+  let h = parseInt(match[1]);
+  const m = parseInt(match[2]);
+  const ampm = match[3].toLowerCase();
+  if (ampm === 'pm' && h !== 12) h += 12;
+  if (ampm === 'am' && h === 12) h = 0;
+  const d = new Date(dateObj);
+  d.setHours(h, m, 0, 0);
+  return d;
+}
+
+// Map each roza to its actual calendar date (year 2026)
+const rozaDates = [
+  null, // index 0 unused
+  new Date(2026, 1, 19), // roza 1 = Feb 19
+  new Date(2026, 1, 20),
+  new Date(2026, 1, 21),
+  new Date(2026, 1, 22),
+  new Date(2026, 1, 23),
+  new Date(2026, 1, 24),
+  new Date(2026, 1, 25),
+  new Date(2026, 1, 26),
+  new Date(2026, 1, 27),
+  new Date(2026, 1, 28),
+  new Date(2026, 2, 1),
+  new Date(2026, 2, 2),
+  new Date(2026, 2, 3),
+  new Date(2026, 2, 4),
+  new Date(2026, 2, 5),
+  new Date(2026, 2, 6),
+  new Date(2026, 2, 7),
+  new Date(2026, 2, 8),
+  new Date(2026, 2, 9),
+  new Date(2026, 2, 10),
+  new Date(2026, 2, 11),
+  new Date(2026, 2, 12),
+  new Date(2026, 2, 13),
+  new Date(2026, 2, 14),
+  new Date(2026, 2, 15),
+  new Date(2026, 2, 16),
+  new Date(2026, 2, 17),
+  new Date(2026, 2, 18),
+  new Date(2026, 2, 19),
+  new Date(2026, 2, 20),
+];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function updateCountdown() {
+  const now = new Date();
+
+  // Find today's roza
+  let todayRoza = null;
+  for (let i = 1; i <= 30; i++) {
+    const d = rozaDates[i];
+    if (d.getFullYear() === now.getFullYear() &&
+        d.getMonth() === now.getMonth() &&
+        d.getDate() === now.getDate()) {
+      todayRoza = data[i - 1];
+      break;
+    }
+  }
+
+  // If before Ramzan
+  if (!todayRoza) {
+    // Check if before first roza
+    const firstSehri = parseTime(rozaDates[1], data[0].sehr);
+    if (now < firstSehri) {
+      // Countdown to first sehri
+      const diff = firstSehri - now;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-label').textContent = '🌙 Pehli Sehri mein bacha waqt';
+      document.getElementById('cd-label').className = 'countdown-label sehri-mode';
+      setBoxClass('sehri');
+      document.getElementById('cd-h').textContent = pad(h);
+      document.getElementById('cd-m').textContent = pad(m);
+      document.getElementById('cd-s').textContent = pad(s);
+      document.getElementById('cd-progress').style.width = '0%';
+      document.getElementById('cd-progress').style.background = '#7eb8e8';
+      document.getElementById('ti-roza').textContent = 'Pehla Roza';
+      document.getElementById('ti-sehri').textContent = data[0].sehr;
+      document.getElementById('ti-iftar').textContent = data[0].iftar;
+    }
+    return;
+  }
+
+  const rozaIndex = todayRoza.roza;
+  const todayDate = rozaDates[rozaIndex];
+  const sehriTime = parseTime(todayDate, todayRoza.sehr);
+  const iftarTime = parseTime(todayDate, todayRoza.iftar);
+
+  // Next sehri (next day)
+  let nextSehriTime = null;
+  if (rozaIndex < 30) {
+    nextSehriTime = parseTime(rozaDates[rozaIndex + 1], data[rozaIndex].sehr);
+  }
+
+  document.getElementById('ti-roza').textContent = rozaIndex + 'واں رو ژہ';
+  document.getElementById('ti-sehri').textContent = todayRoza.sehr;
+  document.getElementById('ti-iftar').textContent = todayRoza.iftar;
+
+  let diff, label, mode, totalDuration;
+
+  if (now < sehriTime) {
+    // Before sehri → countdown to sehri
+    diff = sehriTime - now;
+    // total from midnight to sehri
+    const midnight = new Date(todayDate); midnight.setHours(0,0,0,0);
+    totalDuration = sehriTime - midnight;
+    const elapsed = now - midnight;
+    const pct = Math.min(100, (elapsed / totalDuration) * 100);
+    document.getElementById('cd-progress').style.width = pct + '%';
+    document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #3d6b9e, #7eb8e8)';
+    label = '🌅 Sehri mein bacha waqt';
+    mode = 'sehri';
+    setBoxClass('sehri');
+  } else if (now >= sehriTime && now < iftarTime) {
+    // During roza → countdown to iftar
+    diff = iftarTime - now;
+    totalDuration = iftarTime - sehriTime;
+    const elapsed = now - sehriTime;
+    const pct = Math.min(100, (elapsed / totalDuration) * 100);
+    document.getElementById('cd-progress').style.width = pct + '%';
+    document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #c47a35, #e8a35a)';
+    label = '🌇 Iftar mein bacha waqt';
+    mode = 'iftar';
+    setBoxClass('iftar');
+  } else {
+    // After iftar → countdown to next sehri
+    if (nextSehriTime) {
+      diff = nextSehriTime - now;
+      totalDuration = nextSehriTime - iftarTime;
+      const elapsed = now - iftarTime;
+      const pct = Math.min(100, (elapsed / totalDuration) * 100);
+      document.getElementById('cd-progress').style.width = pct + '%';
+      document.getElementById('cd-progress').style.background = 'linear-gradient(90deg, #3d6b9e, #7eb8e8)';
+      label = '🌅 Agli Sehri mein bacha waqt';
+      mode = 'sehri';
+      setBoxClass('sehri');
+      // Update next day info
+      const nd = data[rozaIndex];
+      document.getElementById('ti-sehri').textContent = nd.sehr + ' (kal)';
+    } else {
+      document.getElementById('cd-label').textContent = '🎉 Ramzan Mubarak! Eid Mubarak!';
+      return;
+    }
+  }
+
+  document.getElementById('cd-label').textContent = label;
+  document.getElementById('cd-label').className = `countdown-label ${mode}-mode`;
+
+  const totalSec = Math.floor(diff / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  document.getElementById('cd-h').textContent = pad(h);
+  document.getElementById('cd-m').textContent = pad(m);
+  document.getElementById('cd-s').textContent = pad(s);
+}
+
+function setBoxClass(mode) {
+  ['cd-box-h','cd-box-m','cd-box-s'].forEach(id => {
+    const el = document.getElementById(id);
+    el.className = `cbox ${mode}-box`;
+  });
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
